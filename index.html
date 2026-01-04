@@ -684,7 +684,7 @@ function formatWonTable(n) {
       const phoneEl = document.getElementById("phone");
       const msrpValueEl = document.getElementById("msrpValue");
       const carrierEl = document.getElementById("carrier");
-      const phoneFullEl = document.getElementById("phoneFull");
+      
       // ✅ 통신사별 개통 기준 (번호이동/기변 공통)
 // ✅ 통신사별 개통 기준 (번호이동/기변 공통)
 const POLICY_BY_CARRIER = {
@@ -749,7 +749,7 @@ carrierEl.addEventListener("change", updatePolicyByCarrier);
         const idx = parseInt(phoneEl.value ?? "0", 10);
         const item = PHONE_LIST[idx] || PHONE_LIST[0];
         msrpValueEl.textContent = item ? item.price : "—";
-        if (phoneFullEl) phoneFullEl.textContent = item ? item.model : "—";
+        
       }
       renderMsrp();
       phoneEl.addEventListener("change", renderMsrp);

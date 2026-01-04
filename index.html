@@ -428,6 +428,17 @@
     white-space: nowrap;
   }
 }
+    /* ✅ 스마트폰/출시가: PC/모바일 모두 무조건 좌우 고정 */
+.phone-price-row{
+  display: flex !important;
+  gap: 12px !important;
+  align-items: flex-start !important;
+}
+
+.phone-price-row .field-col{
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+}
   </style>
 </head>
 

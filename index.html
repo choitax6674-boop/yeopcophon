@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>옆커폰 동성점 - 실구매가 계산기</title>
+
+  <style>
+    body { font-family: system-ui, -apple-system, Arial, sans-serif; margin: 0; padding: 16px; background: #f6f7fb; }
+    .wrap { max-width: 580px; margin: 0 auto; }
+    .card { background: white; border-radius: 16px; padding: 12px 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
+    .card + .card { margin-top: 16px; }
+
+    .topbar{ display:flex; justify-content:space-between; align-items:flex-start; }
+    .title-wrap{ display:flex; align-items:center; gap:8px; }
+    .logo{
+      width: 150px;
+      height: auto;
+      vertical-align: middle;
+      margin-right: 10px;
+      position: relative;
+      top: 0px;
+    }
+
+    .row { margin: 12px 0; }
+
+    /* ✅ 모든 상단 라벨 통일 */
+    label,
+    .field-label{
+      display:block;
+      font-size:15px;
+      font-weight:700;
+      color:#111827;
+      margin-bottom:6px;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #d8dbe5;
+      font-size: 15px;
+      box-sizing: border-box;
+      background:#fff;
+    }
+
+    .btn { border: none; background: #111827; color: #fff; cursor: pointer; font-size: 15px; }
+    .btn:active { transform: translateY(1px); }
+
+    .hint { font-size: 12px; color: #6b7280; margin-top: 6px; }
+    .hint.small { font-size: 11px; }
+
+    /* ✅ 결과 박스(출시가/실구매가/시세표 등 공통) */
+    .result {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: #f1f5ff;
+      border: 1px solid #dbe7ff;
+    }
+    .result .title { font-size: 12px; font-weight: 700; color: #374151; margin-bottom: 6px; }
+    .result .value { font-size: 22px; font-weight: 800; color: #111827; white-space: nowrap; word-break: keep-all; text-align: left; }
+
+    .grid { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
+    .grid .row { margin: 0; }
+    /* ✅ 모바일에서 개통방법 버튼 깨짐 방지 */
+@media (max-width: 520px){
+  .seg{
+    gap: 10px;              /* 버튼 사이 간격 조금 확보 */
+  }
+
+  .seg-btn{
+    height: 54px;           /* 버튼 높이 고정 */
+    padding: 0 12px;        /* 세로 패딩 제거(줄바꿈 방지) */
+    font-size: 16px;        /* 글자 크기 약간 키워도 됨 */
+    white-space: nowrap;    /* ✅ 줄바꿈 금지 */
+    word-break: keep-all;   /* 한글 단어 쪼개짐 방지 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+    /* ✅ 안내문구 + 사전승낙서 */
+    .notice-wrap{ display: flex; gap: 16px; align-items: flex-start; }
+    .notice{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: #555;
+      font-size: 14px;
+      line-height: 1.6;
+      flex: 1;
+    }
+    .notice li{ margin: 6px 0; }
+    .notice li.gap{ margin: 16px 0; list-style: none; }
+    .notice-inline{ list-style: none; padding-left: 0; margin-left: -18px; }
+
+    /* 사전승낙서 */
+    .precon{ display:flex; flex-direction:column; align-items:center; text-decoration:none; }
+    .precon img{ max-width:80px; }
+    .precon-text{ font-size:11px; margin-top: -13px; color:#374151; }
+
+    /* ✅ 통신사 공식 링크(안내문구 하단 details) */
+    .carrier-inline summary{
+      cursor:pointer;
+      font-weight:700;
+      color:#374151;
+    }
+    .carrier-links-inner{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+    }
+    .carrier-links-inner .carrier{ margin: 10px 0; }
+    .carrier-links-inner .carrier strong{ display:block; margin-bottom: 6px; }
+    .carrier-links-inner ul{ padding-left: 16px; margin: 0; }
+    .carrier-links-inner li{ margin: 4px 0; }
+    .carrier-links-inner a{ color:#111827; text-decoration: underline; }
+
+    /* ✅ 개통방법(버튼) */
+    .seg { display: flex; gap: 8px; }
+    .seg-btn{
+      flex: 1; padding: 14px; border-radius: 14px;
+      border: 1px solid #d8dbe5; background: #ffffff;
+      font-size: 15px; font-weight: 800; cursor: pointer;
+    }
+    .seg-btn.active{ background: #111827; color: #ffffff; border-color: #111827; }
+
+    /* ✅ 휴대폰 선택 / 출시가 완전 동일 레이아웃 */
+    .phone-price-row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      align-items:start;
+    }
+    .field-col{
+      display:flex;
+      flex-direction:column;
+    }
+    .field-box{
+      height:48px;
+      padding:0 16px;
+      border-radius:16px;
+      border:1px solid #dbe7ff;
+      background:#f1f5ff;
+      display:flex;
+      align-items:center;
+      font-size:16px;
+      font-weight:800;
+      color:#111827;
+      box-sizing:border-box;
+    }
+    .select-box{
+      background:#fff;
+      border-color:#d8dbe5;
+      appearance:auto;
+    }
+
+    /* ✅ 실구매가 헤더 */
+    .result-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    /* ✅ 시세표 헤더 */
+    .method-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+    .method-left{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      font-size: 13px;
+      font-weight: 700;
+      color:#374151;
+    }
+
+    /* ✅ 시세표 표 */
+    .table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-left: -4px; margin-right: -4px; }
+    .price-table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 12px; min-width: 0 !important; table-layout: fixed; }
+    .price-table th, .price-table td {
+      padding: 12px 14px; border-bottom: 1px solid #e5e7eb; font-size: 14px;
+      white-space: nowrap; word-break: keep-all; font-variant-numeric: tabular-nums; width:44%;
+    }
+    .price-table th { color: #374151; background: #eef2ff; font-weight: 800; }
+    .price-table th:first-child, .price-table td:first-child { text-align:left; }
+    .price-table th:not(:first-child), .price-table td:not(:first-child) { text-align:center; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; background:#111827; color:#fff; }
+    .subtle { font-size: 12px; color:#6b7280; margin-top: 8px; }
+    .price-negative { color: #dc2626; font-weight: 800; }
+    .price-positive { color: #111827; }
+    .price-num { display:inline-block; width:100%; text-align:left; }
+
+    /* ✅ 액션(전화/길) */
+    .arrow-area{ margin: 18px 0 8px; margin-bottom: 18px; }
+    .action-link{
+      display:block;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #111827;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .action-link:hover{ opacity: 0.9; }
+
+    .action-link.map{
+      background:#ffffff;
+      color:#111827;
+      border:2px solid #2563eb;
+    }
+    .action-link.map:hover{ background:#eff6ff; }
+
+    /* details 기본 화살표 제거 */
+    .action-block summary{ list-style: none; }
+    .action-block summary::-webkit-details-marker{ display:none; }
+    .action-block summary::marker{ content:""; }
+
+    /* ✅ 아이콘(닫힘=🧭, 열림=📍) */
+    .icon-swap::before{
+      content: "🧭";
+      display: inline-block;
+      margin-right: 8px;
+      transform: translateY(1px);
+    }
+    .action-block[open] .icon-swap::before{ content: "📍"; }
+
+    /* ✅ 펼쳐지는 지도 */
+    .map-content{
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: max-height 380ms ease, opacity 260ms ease, transform 260ms ease;
+    }
+    .action-block[open] .map-content{
+      max-height: 1000px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .map-img{
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      margin-top: 10px;
+    }
+
+    /* ✅ 번호이동 select 높이/모양 통일 */
+    #tablePolicy{
+      height: 52px;
+      border-radius: 16px;
+      font-weight: 800;
+    }
+
+    /* ✅ 시세표 토글 버튼(요약) */
+    .table-toggle{ margin-top: 12px; }
+    .table-summary{
+      list-style:none;
+      cursor:pointer;
+      user-select:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      width:100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 2px solid #dbe7ff;
+      background: #f1f5ff;
+      font-size: 15px;
+      font-weight: 900;
+      color:#111827;
+      box-sizing:border-box;
+    }
+    .table-summary::-webkit-details-marker{ display:none; }
+    .table-summary::after{ content:"▾"; font-size: 16px; opacity: 0.7; }
+    .table-toggle[open] .table-summary::after{ content:"▴"; }
+    .table-toggle[open] .table-summary{ border-color:#2563eb; background:#eff6ff; }
+
+    /* ✅ 섹션 헤더(제목+오늘기준) */
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:12px;
+      margin: 6px 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .section-title{
+      font-size: 16px;
+      font-weight: 900;
+      color:#111827;
+    }
+    .date-global{
+      font-size: 12px;
+      font-weight: 700;
+      color:#6b7280;
+      white-space:nowrap;
+    }
+    .jump-link{
+  display:inline-block;
+  margin-top:8px;
+  font-size:14px;
+  font-weight:700;
+  color:#2563eb;
+  text-decoration:underline;
+}
+
+/* ✅ (핵심) 테이블 강제 옆스크롤 원인 제거 */
+.price-table{
+  width: 100%;
+  min-width: 0 !important;
+  table-layout: fixed;
+}
+
+/* 모델/가격 칸 폭 비율(모바일에서도 4칸이 들어가게) */
+.price-table th:first-child,
+.price-table td:first-child{
+  width: 44%;
+}
+.price-table th:nth-child(2), .price-table td:nth-child(2),
+.price-table th:nth-child(3), .price-table td:nth-child(3),
+.price-table th:nth-child(4), .price-table td:nth-child(4){
+  width: 18.6%;
+}
+
+/* 모델명이 길면 말줄임(한 줄 유지) */
+.price-table td:first-child{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ✅ 모바일에서 글자/패딩 더 줄여서 한눈에 */
+@media (max-width: 520px){
+  .price-table th,
+  .price-table td{
+    padding: 8px 8px;
+    font-size: 12px;
+  }
+
+  /* ✅ 시세표 숫자만 작게 */
+  #tableBox .price-num{
+    font-size: 12px;
+  }
+
+  /* ✅ 모바일에서 가로 스크롤 제거 */
+  .table-wrap{
+    overflow-x: hidden;
+  }
+}
+/* ✅ 시세표 숫자칸 좌우 여백만 더 줄이기 */
+.price-table th:not(:first-child),
+.price-table td:not(:first-child){
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+/* 숫자는 오른쪽 정렬이 더 안 겹쳐 보임 */
+.price-table td:not(:first-child){
+  text-align: right;
+}
+.price-num{
+  display:block;
+  text-align:right;
+}
+/* ✅ 모바일에서 안내문 + 사전승낙서 세로 배치(옆 빈공간 해결) */
+@media (max-width: 520px){
+  .notice-wrap{
+    display: block !important;
+  }
+  .precon{
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-start; /* 원하면 center로 바꿔도 됨 */
+  }
+  .precon img{
+    max-width: 72px; /* 너무 크면 60~70으로 */
+    height: auto;
+  }
+}
+.phone-full{
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 800;
+  color:#111827;
+  white-space: normal;        /* ✅ 줄바꿈 허용 */
+  word-break: keep-all;       /* ✅ 한글 깨짐 방지 */
+  line-height: 1.25;
+}
+
+/* 모바일에서 select 글자도 살짝만 줄여서 덜 짤리게(선택영역) */
+@media (max-width: 520px){
+  #phone{
+    font-size: 15px;          /* 필요하면 14px까지 */
+  }
+}
+/* ✅ 모바일에서 통신사/개통방법 예전처럼: 세로 + 버튼 2개 동일 폭/높이 */
+@media (max-width: 520px){
+  .grid{
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* 개통방법 버튼 2개가 한 줄에서 반반 */
+  .seg{
+    display: flex;
+    gap: 10px;
+  }
+  .seg-btn{
+    flex: 1;
+    height: 52px;          /* 통신사 select랑 비슷한 높이 */
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 800;
+    padding: 0;            /* 모바일에서 글자 줄바꿈 방지 */
+    white-space: nowrap;
+  }
+}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- ✅ 상단 카드 -->
+    <div class="card">
+      <div class="topbar">
+        <div class="title-wrap">
+          <img src="./시작/img/yeopcophon-logo.png" class="logo" alt="옆커폰 로고">
+          <h1 style="margin:0; font-size:18px;">진주휴대폰성지 옆커폰동성점</h1>
+        </div>
+      </div>
+
+      <div class="notice-wrap">
+        <ul class="notice">
+          <li>본 매장은 불법보조금을 지원하지 않습니다</li>
+          <li class="gap"></li>
+
+          <li>본 시세표는 공시지원금 및 유통망지원금이 포함된 금액입니다.</li>
+          <li>유통망지원금은 통신사별 각 20만원(SKT / KT / LGU+)이 포함되어 있습니다.</li>
+          <li class="gap"></li>
+
+          <li>할부개통시 할부이자 5.9% 별도 부과됩니다.</li>
+          <li>공시지원금 개통시 요금제 유지기간은 6개월이며, 이후 최저요금제로 변경 가능합니다.</li>
+          <li>통신사별 최저요금제는 SKT 43,000원 / KT 50,000원 / LGU+ 47,000원입니다.</li>
+          <li class="gap"></li>
+
+          <li>제휴카드 신규 발급 시 추가 할인으로 더 저렴한 개통이 가능합니다.</li>
+          <li>인터넷 + TV + 스마트폰 개통 시 추가 지원 혜택을 드립니다.</li>
+          <li class="gap"></li>
+
+          <li>선택약정개통 및 그외 문의사항은 매장으로 직접 방문 부탁드립니다.</li>
+          <li class="gap"></li>
+
+          <li class="notice-inline">
+            <details class="carrier-inline">
+              <summary>▶ 통신사별 공식 요금·상품 안내 보기</summary>
+              <div class="carrier-links-inner">
+
+                <div class="carrier">
+                  <strong>SKT</strong>
+                  <ul>
+                    <li><a href="https://www.tworld.co.kr/web/product/plan/list" target="_blank" rel="noopener">요금제</a></li>
+                    <li><a href="https://shop.tworld.co.kr/notice" target="_blank" rel="noopener">공통지원금</a></li>
+                    <li><a href="https://www.tworld.co.kr/web/product/addon/submain" target="_blank" rel="noopener">부가서비스</a></li>
+                    <li><a href="https://www.tworld.co.kr/web/product/wire/internet" target="_blank" rel="noopener">유선상품</a></li>
+                  </ul>
+                </div>
+
+                <div class="carrier">
+                  <strong>KT</strong>
+                  <ul>
+                    <li><a href="https://product.kt.com/wDic/index.do?CateCode=6002" target="_blank" rel="noopener">요금제</a></li>
+                    <li><a href="https://shop.kt.com/mobile/products.do?category=mobile" target="_blank" rel="noopener">공통지원금</a></li>
+                    <li><a href="https://product.kt.com/wDic/index.do?CateCode=6003" target="_blank" rel="noopener">부가서비스</a></li>
+                    <li><a href="https://product.kt.com/wDic/index.do?CateCode=6005" target="_blank" rel="noopener">유선상품</a></li>
+                  </ul>
+                </div>
+
+                <div class="carrier">
+                  <strong>LG U+</strong>
+                  <ul>
+                    <li><a href="https://www.lguplus.com/mobile/plan/mplan/plan-all" target="_blank" rel="noopener">요금제</a></li>
+                    <li><a href="https://www.lguplus.com/mobile/device/phone" target="_blank" rel="noopener">이동사지원금</a></li>
+                    <li><a href="https://www.lguplus.com/mobile/plan/addon/addon-all" target="_blank" rel="noopener">부가서비스</a></li>
+                    <li><a href="https://www.lguplus.com/internet-iptv" target="_blank" rel="noopener">유선상품</a></li>
+                  </ul>
+                </div>
+
+              </div>
+            </details>
+          </li>
+        </ul>
+
+        <a class="precon"
+           href="https://ictmarket.or.kr:8443/precon/pop_CertIcon.do?PRECON_REQ_ID=PRE0000194294&YN=1"
+           target="_blank" rel="noopener">
+          <img src="https://ictmarket.or.kr:8443/getCertIcon.do?cert_icon=KP25071409387P001" alt="사전승낙서">
+          <span class="precon-text">사전승낙서</span>
+        </a>
+      </div>
+      <a href="#price-section" class="jump-link">
+  📱 휴대폰 가격 바로 확인하기
+</a>
+
+      <div class="arrow-area">
+        <a href="tel:010-3677-8043" class="action-link call">📞 전화 상담 바로 연결 (010-3677-8043)</a>
+
+        <details class="action-block">
+          <summary class="action-link map">
+            <span class="icon-swap" aria-hidden="true"></span>
+            <span class="label">찾아오시는 길</span>
+          </summary>
+
+          <div class="map-content">
+            <img
+              src="./시작/img/map-yeopcophon-jinju.png"
+              alt="진주 휴대폰성지 옆커폰 동성점 찾아오시는 길 약도"
+              class="map-img"
+            >
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- ✅ 하단 카드 -->
+    <div class="card" id="price-section">
+
+      <div class="section-head">
+        <div class="section-title">관심있는 핸드폰 가격 알아보기</div>
+        <div class="date-global">📅 오늘 기준 · <span id="globalDate">—</span></div>
+      </div>
+
+      <!-- 휴대폰 선택 + 출시가 -->
+      <div class="row phone-price-row">
+        <div class="field-col">
+          <div class="field-label">스마트폰</div>
+          <select id="phone" class="field-box select-box"></select>
+          <div id="phoneFull" class="phone-full"></div>
+          <div class="hint small">선택한 모델의 출시가(정가)가 자동 표시됩니다.</div>
+        </div>
+
+        <div class="field-col">
+          <div class="field-label">출시가</div>
+          <div class="field-box">
+            <span id="msrpValue">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 통신사 / 개통방법 -->
+      <div class="grid">
+        <div class="row">
+          <label for="carrier">통신사</label>
+          <select id="carrier">
+            <option value="SK">SK</option>
+            <option value="KT">KT</option>
+            <option value="LGU+">LGU+</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label>개통방법</label>
+          <div class="seg">
+            <button type="button" class="seg-btn active" data-plan="move">번호이동</button>
+            <button type="button" class="seg-btn" data-plan="change">기기변경</button>
+          </div>
+        </div>
+      </div>
+     <!-- ✅ 개통 기준 -->
+<div class="result" id="policyBox">
+  <div class="title">개통 기준</div>
+  <div class="value" id="policyValue" style="font-size:14px; font-weight:700; line-height:1.55;">
+    —
+  </div>
+</div>
+      <!-- 계산 -->
+      <div class="row">
+        <button id="calcBtn" class="btn" type="button" style="height:56px;border-radius:16px;">계산하기</button>
+      </div>
+
+      <!-- 실구매가 -->
+      <div class="result" id="resultBox">
+        <div class="result-head">
+          <div class="title">실구매가(현금기준)</div>
+        </div>
+        <div class="value" id="resultValue">—</div>
+      </div>
+
+      <!-- 시세표 -->
+      <div class="method-head">
+        <div class="method-left">
+          <span>개통방법,</span>
+          <span>통신사별 현금가 기준</span>
+        </div>
+      </div>
+
+      <select id="tablePolicy">
+        <option value="move">번호이동</option>
+        <option value="change">기기변경</option>
+      </select>
+
+      <div class="hint small">※ 개통방법 변경 시 시세표 기준이 함께 변경됩니다.</div>
+
+      <details class="table-toggle" id="tableToggle">
+        <summary class="table-summary" id="tableSummary">오늘 시세표 보기</summary>
+
+        <div class="result" id="tableBox">
+          <div class="title">시세표</div>
+          <div class="value" style="font-size:16px; font-weight:700;">—</div>
+        </div>
+      </details>
+    </div>
+
+  </div>
+
+  <!-- 1) 데이터 로드 -->
+  <script src="./시작/js/prices.js"></script>
+
+  <!-- 2) 동작 스크립트 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const PHONE_LIST  = window.PHONE_LIST;
+      const CASH_PRICES = window.CASH_PRICES;
+
+      if (!Array.isArray(PHONE_LIST) || PHONE_LIST.length === 0) {
+        alert("PHONE_LIST 로드 실패! prices.js에 PHONE_LIST가 있는지/경로가 맞는지 확인");
+        return;
+      }
+
+      // ✅ 오늘 날짜(공통)
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const globalDateEl = document.getElementById("globalDate");
+      if (globalDateEl) globalDateEl.textContent = `${y}년 ${m}월 ${day}일`;
+
+      // ✅ 유틸
+      function formatWon(n) {
+        const num = Number(n);
+        if (!Number.isFinite(num)) return "—";
+        const isNegative = num < 0;
+        const absNum = Math.abs(num);
+        return `<span class="price-num ${isNegative ? "price-negative" : "price-positive"}">
+          ${isNegative ? "-" : ""}${absNum.toLocaleString("ko-KR")}원
+        </span>`;
+      }
+      // ✅ 시세표용: 만원 단위로 짧게 표시 (겹침 방지)
+function formatWonTable(n) {
+  const num = Number(n);
+  if (!Number.isFinite(num)) return "—";
+
+  const isNeg = num < 0;
+  const abs = Math.abs(num);
+
+  // 10,000원 단위 반올림 (원하면 Math.floor로 바꿔도 됨)
+  const man = Math.round(abs / 10000);
+
+  return `<span class="price-num ${isNeg ? "price-negative" : "price-positive"}">
+    ${isNeg ? "-" : ""}${man.toLocaleString("ko-KR")}만
+  </span>`;
+}
+      function calcFinal(model, carrier, planType) {
+        const price = CASH_PRICES?.[carrier]?.[planType]?.[model];
+        if (price == null) return { ok: false, message: "정책 없음" };
+        return { ok: true, final: price };
+      }
+
+      // ✅ DOM
+      let planType = "move";
+      const planBtns = document.querySelectorAll(".seg-btn");
+      const phoneEl = document.getElementById("phone");
+      const msrpValueEl = document.getElementById("msrpValue");
+      const carrierEl = document.getElementById("carrier");
+      const phoneFullEl = document.getElementById("phoneFull");
+      // ✅ 통신사별 개통 기준 (번호이동/기변 공통)
+// ✅ 통신사별 개통 기준 (번호이동/기변 공통)
+const POLICY_BY_CARRIER = {
+  "SK": `
+프리미엄 요금제 (109,000원)<br>
+부가서비스 및 보험<br>
+1. T우주패스<br>
+2. 마이샵 마트콜 3<br>
+3. TAC-파손보험
+  `,
+  "KT": `
+초이스 스페셜 (110,000원)<br>
+부가서비스 및 보험<br>
+1. 필수팩 M1<br>
+2. 파손보험
+  `,
+  "LGU+": `
+프리미엄 슈퍼 (115,000원)<br>
+부가서비스 및 보험<br>
+1. 유플레이 프리미엄<br>
+2. 컬러링 음악감상 플러스<br>
+3. 폰교체패스
+  `
+};
+
+const policyValueEl = document.getElementById("policyValue");
+
+function updatePolicyByCarrier() {
+  if (!policyValueEl) return;
+  const carrier = carrierEl.value;
+  policyValueEl.innerHTML = POLICY_BY_CARRIER[carrier] || "—";
+}
+
+// 최초 1회 표시
+updatePolicyByCarrier();
+
+// 통신사 변경 시 자동 갱신
+carrierEl.addEventListener("change", updatePolicyByCarrier);
+      const btnEl = document.getElementById("calcBtn");
+      const tablePolicyEl = document.getElementById("tablePolicy");
+      const tableBox = document.getElementById("tableBox");
+      const resultValueEl = document.getElementById("resultValue");
+
+      const tableToggle = document.getElementById("tableToggle");
+      const tableSummary = document.getElementById("tableSummary");
+
+      // ✅ 개통방법(상단 버튼) 토글
+      planBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          planBtns.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          planType = btn.dataset.plan;
+        });
+      });
+
+      // ✅ 드롭다운 채우기
+      phoneEl.innerHTML = PHONE_LIST.map((p, idx) =>
+        `<option value="${idx}">${p.model}</option>`
+      ).join("");
+
+      function renderMsrp() {
+        const idx = parseInt(phoneEl.value ?? "0", 10);
+        const item = PHONE_LIST[idx] || PHONE_LIST[0];
+        msrpValueEl.textContent = item ? item.price : "—";
+        if (phoneFullEl) phoneFullEl.textContent = item ? item.model : "—";
+      }
+      renderMsrp();
+      phoneEl.addEventListener("change", renderMsrp);
+
+      function renderResultValue(htmlText) {
+        if (resultValueEl) resultValueEl.innerHTML = htmlText;
+      }
+
+      // ✅ 실구매가 계산
+      btnEl.addEventListener("click", () => {
+        const idx = parseInt(phoneEl.value ?? "0", 10);
+        const item = (PHONE_LIST[idx] || PHONE_LIST[0]);
+        const model = item.model;
+
+        const carrier = carrierEl.value;
+        const r = calcFinal(model, carrier, planType);
+        if (!r.ok) { renderResultValue("—"); return; }
+        renderResultValue(formatWon(r.final));
+      });
+
+      // ✅ 시세표 렌더
+      function renderTable() {
+        const carriers = ["SK", "KT", "LGU+"];
+        const planTypeForTable = tablePolicyEl.value;
+
+        const header = `
+          <thead>
+            <tr>
+              <th>모델</th><th>SK</th><th>KT</th><th>LGU+</th>
+            </tr>
+          </thead>
+        `;
+
+        let rows = "";
+        for (const item of PHONE_LIST) {
+          const cols = carriers.map(c => {
+            const r = calcFinal(item.model, c, planTypeForTable);
+            return `<td>${r.ok ? formatWonTable(r.final) : "—"}</td>`;
+          }).join("");
+          rows += `<tr><td>${item.model}</td>${cols}</tr>`;
+        }
+
+        const valueEl = tableBox.querySelector(".value");
+        if (!valueEl) return;
+
+        valueEl.innerHTML = `
+          <div class="table-wrap">
+            <table class="price-table">
+              ${header}
+              <tbody>${rows}</tbody>
+            </table>
+            <div class="subtle">
+              기준:
+              <span class="badge">${planTypeForTable === "move" ? "번호이동" : "기기변경"}</span>
+              <span class="badge">현금가 기준</span>
+            </div>
+          </div>
+        `;
+      }
+
+      // ✅ 시세표 toggle (열릴 때만 render)
+      tableToggle.addEventListener("toggle", () => {
+        if (!tableToggle.open) {
+          tableSummary.textContent = "오늘 시세표 보기";
+          return;
+        }
+
+        renderTable();
+        tableSummary.textContent = "오늘 시세표 닫기";
+
+        requestAnimationFrame(() => {
+          tableToggle.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      // ✅ 번호이동/기기변경(select) 바꾸면 시세표 자동 닫기
+      tablePolicyEl.addEventListener("change", () => {
+        if (tableToggle.open) tableToggle.open = false;
+        tableSummary.textContent = "오늘 시세표 보기";
+      });
+    });
+  </script>
+</body>
+</html>

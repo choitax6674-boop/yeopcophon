@@ -2,75 +2,75 @@
 window.PHONE_LIST = [
   {
     "model": "S25(256G)",
-    "price": "-"
+    "price": 1155000
   },
   {
     "model": "S25(512G)",
-    "price": "-"
+    "price": 1298000
   },
   {
     "model": "S25+(256G)",
-    "price": "-"
+    "price": 1353000
   },
   {
     "model": "S25+(512G)",
-    "price": "-"
+    "price": 1496000
   },
   {
     "model": "S25ULTRA(256G)",
-    "price": "-"
+    "price": 1698400
   },
   {
     "model": "S25ULTRA(512G)",
-    "price": "-"
+    "price": 1841400
   },
   {
     "model": "S25엣지(256G)",
-    "price": "-"
+    "price": 1496000
   },
   {
     "model": "S25엣지(512G)",
-    "price": "-"
+    "price": 1639000
   },
   {
     "model": "플립7(256G)",
-    "price": "-"
+    "price": 1485000
   },
   {
     "model": "플립7(512G)",
-    "price": "-"
+    "price": 1643400
   },
   {
     "model": "폴드7(256G)",
-    "price": "-"
+    "price": 2379300
   },
   {
     "model": "폴드7(512G)",
-    "price": "-"
+    "price": 2537700
   },
   {
     "model": "아이폰17(256G)",
-    "price": "-"
+    "price": 1287000
   },
   {
     "model": "아이폰17(512G)",
-    "price": "-"
+    "price": 1584000
   },
   {
     "model": "아이폰17PRO(256G)",
-    "price": "-"
+    "price": 1782000
   },
   {
     "model": "아이폰17PRO(512G)",
-    "price": "-"
+    "price": 2090000
   },
   {
     "model": "아이폰17AIR(256G)",
-    "price": "-"
+    "price": 1584000
   },
   {
     "model": "아이폰17AIR(512G)",
-    "price": "-"
+    "price": 1881000
   }
 ];
 

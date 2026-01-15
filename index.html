@@ -468,6 +468,12 @@
   color:#64748b;
   font-weight:700;
 }
+    .update-mini{
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b7280;
+  white-space: nowrap;
+}
   </style>
 </head>
 
@@ -482,9 +488,6 @@
 
     <div class="title-text">
       <h1 style="margin:0; font-size:18px;">진주휴대폰성지 옆커폰동성점</h1>
-      <div class="update-line">
-        ⏱ 업데이트: <span id="updateTime">—</span>
-      </div>
     </div>
   </div>
 </div>
@@ -613,7 +616,10 @@
 
       <div class="section-head">
         <div class="section-title">관심있는 핸드폰 가격 알아보기</div>
-        <div class="date-global">📅 오늘 기준 · <span id="globalDate">—</span></div>
+        <div class="date-global">
+          📅 오늘 기준 · <span id="globalDate">—</span>
+          <span class="update-mini">· <span id="updateTime">—</span></span>
+        </div>
       </div>
 
       <!-- 휴대폰 선택 + 출시가 -->

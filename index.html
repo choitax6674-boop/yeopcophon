@@ -818,9 +818,15 @@ carrierEl.addEventListener("change", updatePolicyByCarrier);
       function renderMsrp() {
         const idx = parseInt(phoneEl.value ?? "0", 10);
         const item = PHONE_LIST[idx] || PHONE_LIST[0];
-        msrpValueEl.textContent = item ? item.price : "—";
-        
-      }
+
+        if (!item || !item.price || isNaN(item.price)) {
+          msrpValueEl.textContent = "—";
+          return;
+        }
+
+        const num = Number(item.price);
+        msrpValueEl.textContent = num.toLocaleString("ko-KR") + "원";
+     }
       renderMsrp();
       phoneEl.addEventListener("change", renderMsrp);
 

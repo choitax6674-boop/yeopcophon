@@ -729,6 +729,22 @@
       const day = String(d.getDate()).padStart(2, "0");
       const globalDateEl = document.getElementById("globalDate");
       if (globalDateEl) globalDateEl.textContent = `${y}년 ${m}월 ${day}일`;
+      // ✅ 오늘 날짜(공통)
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+
+      const globalDateEl = document.getElementById("globalDate");
+      if (globalDateEl) globalDateEl.textContent = `${y}년 ${m}월 ${day}일`;
+
+      // ✅ 업데이트 시간(HH:MM)
+      const updateTimeEl = document.getElementById("updateTime");
+      if (updateTimeEl) {
+        const pad = (n) => String(n).padStart(2, "0");
+        const hhmm = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        updateTimeEl.textContent = window.PRICE_UPDATED_AT || hhmm;
+      }
 
       // ✅ 유틸
       function formatWon(n) {

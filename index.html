@@ -740,11 +740,10 @@
 
       // ✅ 업데이트 시간(HH:MM)
       const updateTimeEl = document.getElementById("updateTime");
-      if (updateTimeEl) {
-        const pad = (n) => String(n).padStart(2, "0");
-        const hhmm = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-        updateTimeEl.textContent = window.PRICE_UPDATED_AT || hhmm;
-      }
+if (updateTimeEl && window.PRICE_UPDATED_AT) {
+  const timeOnly = window.PRICE_UPDATED_AT.split(" ")[1]; // "17:05"
+  updateTimeEl.textContent = timeOnly;
+}
 
       // ✅ 유틸
       function formatWon(n) {

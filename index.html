@@ -723,25 +723,22 @@
       }
 
       // ✅ 오늘 날짜(공통)
-      const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      const globalDateEl = document.getElementById("globalDate");
-      if (globalDateEl) globalDateEl.textContent = `${y}년 ${m}월 ${day}일`;
-      // ✅ 오늘 날짜(공통)
-      const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
+const d = new Date();
+const y = d.getFullYear();
+const m = String(d.getMonth() + 1).padStart(2, "0");
+const day = String(d.getDate()).padStart(2, "0");
 
-      const globalDateEl = document.getElementById("globalDate");
-      if (globalDateEl) globalDateEl.textContent = `${y}년 ${m}월 ${day}일`;
+const globalDateEl = document.getElementById("globalDate");
+if (globalDateEl) globalDateEl.textContent = `${y}년 ${m}월 ${day}일`;
 
-      // ✅ 업데이트 시간(HH:MM)
-      const updateTimeEl = document.getElementById("updateTime");
-if (updateTimeEl && window.PRICE_UPDATED_AT) {
-  const timeOnly = window.PRICE_UPDATED_AT.split(" ")[1]; // "17:05"
+// ✅ 업데이트 시간(HH:MM) - prices.js의 window.PRICE_UPDATED_AT 사용
+const updateTimeEl = document.getElementById("updateTime");
+if (updateTimeEl) {
+  const raw = window.PRICE_UPDATED_AT; // 예: "2026-01-15 17:05"
+  const timeOnly = (typeof raw === "string" && raw.includes(" "))
+    ? raw.split(" ")[1]
+    : `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+
   updateTimeEl.textContent = timeOnly;
 }
 

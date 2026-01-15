@@ -464,6 +464,10 @@
   border-radius: 14px;
   font-size: 15px;
 }
+    .stock-out{
+  color:#dc2626;
+  font-weight:900;
+}
   </style>
 </head>
 
@@ -853,7 +857,10 @@ carrierEl.addEventListener("change", updatePolicyByCarrier);
 
         const carrier = carrierEl.value;
         const r = calcFinal(model, carrier, planType);
-        if (!r.ok) { renderResultValue(r.message || "재고 없음"); return; }
+        if (!r.ok) { 
+  renderResultValue(`<span class="stock-out">${r.message || "재고 없음"}</span>`); 
+  return; 
+}
         renderResultValue(formatWon(r.final));
       });
 
@@ -874,7 +881,7 @@ carrierEl.addEventListener("change", updatePolicyByCarrier);
         for (const item of PHONE_LIST) {
           const cols = carriers.map(c => {
             const r = calcFinal(item.model, c, planTypeForTable);
-            return `<td>${r.ok ? formatWonTable(r.final) : "재고 없음"}</td>`;
+            return `<td>${r.ok ? formatWonTable(r.final) : '<span class="stock-out">재고 없음</span>'}</td>`;
           }).join("");
           rows += `<tr><td>${item.model}</td>${cols}</tr>`;
         }

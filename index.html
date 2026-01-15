@@ -740,10 +740,21 @@ function formatWonTable(n) {
   </span>`;
 }
       function calcFinal(model, carrier, planType) {
-        const price = CASH_PRICES?.[carrier]?.[planType]?.[model];
-        if (price == null) return { ok: false, message: "정책 없음" };
-        return { ok: true, final: price };
-      }
+  const price = CASH_PRICES?.[carrier]?.[planType]?.[model];
+
+  // ✅ null / undefined = 재고 없음
+  if (price === null || price === undefined) {
+    return { ok: false, message: "재고 없음" };
+  }
+
+  // ✅ 숫자인지 확인 (0도 정상)
+  const num = Number(price);
+  if (!Number.isFinite(num)) {
+    return { ok: false, message: "재고 없음" };
+  }
+
+  return { ok: true, final: num };
+}
 
       // ✅ DOM
       let planType = "move";
@@ -842,7 +853,7 @@ carrierEl.addEventListener("change", updatePolicyByCarrier);
 
         const carrier = carrierEl.value;
         const r = calcFinal(model, carrier, planType);
-        if (!r.ok) { renderResultValue("—"); return; }
+        if (!r.ok) { renderResultValue(r.message || "재고 없음"); return; }
         renderResultValue(formatWon(r.final));
       });
 
@@ -863,7 +874,7 @@ carrierEl.addEventListener("change", updatePolicyByCarrier);
         for (const item of PHONE_LIST) {
           const cols = carriers.map(c => {
             const r = calcFinal(item.model, c, planTypeForTable);
-            return `<td>${r.ok ? formatWonTable(r.final) : "—"}</td>`;
+            return `<td>${r.ok ? formatWonTable(r.final) : "재고 없음"}</td>`;
           }).join("");
           rows += `<tr><td>${item.model}</td>${cols}</tr>`;
         }

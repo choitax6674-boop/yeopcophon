@@ -1,3 +1,4 @@
+window.PRICE_UPDATED_AT = "2026-01-15 16:34";
 /* auto-generated from prices.csv */
 window.PHONE_LIST = [
   {

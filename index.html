@@ -528,6 +528,50 @@
   color:#6b7280;
   font-weight:700;
 }
+    /* ✅ 상단 CTA 블록 */
+.cta-block{ margin-top: 10px; }
+
+.cta-row{
+  display: flex;
+  gap: 10px;
+}
+
+.cta-btn{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 54px;
+  border-radius: 18px;
+  font-size: 18px;
+  font-weight: 900;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.cta-dark{ background:#111827; color:#fff; }
+.cta-blue{ background:#2563eb; color:#fff; }
+
+.cta-meta{
+  margin-top: 10px;
+  color:#6b7280;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.cta-map{ margin-top: 10px; }
+.cta-map-summary{
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+  font-weight: 900;
+  color:#374151;
+  padding: 10px 0;
+  list-style: none;
+}
+.cta-map-summary::-webkit-details-marker{ display:none; }
+.cta-map-summary::marker{ content:""; }
   </style>
 </head>
 
@@ -542,14 +586,27 @@
   <h1 class="hero-title">진주 휴대폰 성지 옆커폰 동성점</h1>
   <p class="hero-sub">실구매가 투명 공개 · 정확한 상담</p>
 
-  <div class="hero-actions">
-    <a href="tel:010-3677-8043" class="hero-btn primary">📞 전화 상담</a>
-    <a href="#price-section" class="hero-btn secondary">📱 가격 확인</a>
+  <div class="cta-block">
+  <div class="cta-row">
+    <a href="tel:010-3677-8043" class="cta-btn cta-dark">📞 전화 상담</a>
+    <a href="#price-section" class="cta-btn cta-blue">📱 가격 확인</a>
   </div>
 
-  <div class="hero-info">
-    📍 진주시 남강로 675-1<br>
-    ⏰ 오늘 기준 · <span id="updateTime">—</span>
+  <div class="cta-meta">
+    <div>📍 진주시 남강로 675-1</div>
+    <div>⏰ 오늘 기준 · <span id="headerTime">—</span></div>
+  </div>
+
+  <details class="action-block cta-map">
+    <summary class="cta-map-summary">🧭 위치/주차 안내 보기</summary>
+    <div class="map-content">
+      <img
+        src="./map-yeopcophon-jinju.png"
+        alt="진주 옆커폰 동성점 위치/주차 안내"
+        class="map-img"
+      >
+    </div>
+   </details>
   </div>
  </div>
 </div>
@@ -627,27 +684,7 @@
   📱 휴대폰 가격 바로 확인하기
 </a>
 
-    <div class="arrow-area">
-  <a href="tel:010-3677-8043" class="action-link call">
-    📞 전화 상담 바로 연결 (010-3677-8043)
-  </a>
-
- <details class="action-block">
-  <summary class="action-link map">
-    <span class="icon-swap" aria-hidden="true"></span>
-    <span class="label">📍 찾아오시는 길</span>
-  </summary>
-
-  <div class="map-content">
-    <img
-      src="./map-yeopcophon-jinju.png"
-      alt="진주 휴대폰성지 옆커폰 동성점 찾아오시는 길 약도"
-      class="map-img"
-    >
-  </div>
-</details>
-</div>
-
+    
          <!-- 문의 남기기 -->
 
 <details class="reserve-toggle">
@@ -792,6 +829,12 @@ const day = String(d.getDate()).padStart(2, "0");
 
 const globalDateEl = document.getElementById("globalDate");
 if (globalDateEl) globalDateEl.textContent = `${y}년 ${m}월 ${day}일`;
+const headerTimeEl = document.getElementById("headerTime");
+if (headerTimeEl) {
+  const pad = (n) => String(n).padStart(2, "0");
+  const hhmm = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  headerTimeEl.textContent = hhmm;
+}
 
 // ✅ 업데이트 시간(HH:MM) - prices.js의 window.PRICE_UPDATED_AT 사용
 const updateTimeEl = document.getElementById("updateTime");

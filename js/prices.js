@@ -1,4 +1,4 @@
-window.PRICE_UPDATED_AT = "2026-01-16 12:20";
+window.PRICE_UPDATED_AT = "2026-01-16 12:20 기준";
 /* auto-generated from prices.csv */
 window.PHONE_LIST = [
   {

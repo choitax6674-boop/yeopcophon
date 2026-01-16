@@ -20,8 +20,8 @@
 
   <style>
     body { font-family: system-ui, -apple-system, Arial, sans-serif; margin: 0; padding: 16px; background: #f6f7fb; }
-    .wrap { max-width: 580px; margin: 0 auto; }
-    .card { background: white; border-radius: 16px; padding: 12px 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
+    .wrap { max-width: 600px; margin: 0 auto; }
+    .card { background: white; border-radius: 16px; padding: 12px 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); position: relative; }
     .card + .card { margin-top: 16px; }
 
     .topbar{ display:flex; justify-content:space-between; align-items:flex-start; }
@@ -110,7 +110,16 @@
     .notice li.gap{ margin: 16px 0; list-style: none; }
     .notice-inline{ list-style: none; padding-left: 0; margin-left: -18px; }
 
-    .precon{ display:flex; flex-direction:column; align-items:center; text-decoration:none; flex:0 0 auto; }
+    .precon{
+  position: absolute;
+  top: 1px;
+  right: 100px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-decoration:none;
+  flex:0 0 auto;
+}
     .precon img{ max-width:80px; }
     .precon-text{ font-size:11px; margin-top: -13px; color:#374151; }
 
@@ -377,6 +386,100 @@
     .reserve-summary::-webkit-details-marker{ display:none; }
     .reserve-sub{ font-size:12px; font-weight:700; color:#6b7280; }
     .reserve-body{ margin-top:10px; }
+
+    /* 1️⃣ 상단 메인 구조 */
+.hero{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding: 6px 2px 10px;
+}
+
+.hero-logo{
+  width: 140px;
+  height: auto;
+  flex: 0 0 auto;
+}
+
+.hero-text{
+  min-width: 0;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.hero-title{
+  font-size:18px;
+  font-weight:900;
+  color:#111827;
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+.hero-tagline{
+  font-size:14px;
+  font-weight:700;
+  color:#374151;
+  line-height:1.3;
+  white-space:nowrap;
+}
+
+/* 모바일에서만 살짝 줄이기 */
+@media (max-width: 520px){
+  .hero-logo{ width: 120px; }
+  .hero-title{ font-size:16px; }
+  .hero-tagline{ font-size:13px; }
+}
+/* ✅ 핵심 강점 섹션 */
+.strengths{
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.strength-card{
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 12px;
+  background: #ffffff;
+}
+
+.strength-title{
+  font-size: 14px;
+  font-weight: 900;
+  color:#111827;
+  line-height: 1.25;
+}
+
+.strength-desc{
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color:#6b7280;
+  line-height: 1.35;
+}
+
+/* 모바일에서 1열로 */
+@media (max-width: 520px){
+  .strengths{ grid-template-columns: 1fr; }
+}
+.strength-item summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.strength-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.strength-summary{
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 12px;
+  background:#fff;
+}
+.strength-body{ padding: 10px 2px 0; }
   </style>
 </head>
 
@@ -387,15 +490,37 @@
     <div class="card">
 
       <!-- ✅ 헤더(로고/타이틀/업데이트) -->
-      <div class="topbar">
-        <div class="title-wrap">
-          <img src="./yeopcophon-logo.png" class="logo" alt="옆커폰 로고">
-          <div class="title-text">
-            <h1 style="margin:0; font-size:18px;">진주휴대폰성지 옆커폰동성점</h1>
-          </div>
+      <!-- ✅ 상단 메인(로고 + 캐치문구 1줄) -->
+     <div class="hero">
+       <img src="./yeopcophon-logo.png" class="hero-logo" alt="옆커폰 로고">
+       <div class="hero-text">
+         <div class="hero-title">진주휴대폰성지 옆커폰동성점</div>
+         <div class="hero-tagline">실구매가 투명 공개 · 정확한 상담</div>
         </div>
-      </div>
+       </div>
+      <!-- ✅ 핵심 강점 -->
+<div class="strengths">
+  <div class="strength-card">
+    <div class="strength-title">✅ 실구매가 투명 공개</div>
+    <div class="strength-desc">당일 시세 기준으로 정확히 안내</div>
+  </div>
 
+  <div class="strength-card">
+    <div class="strength-title">✅ 조건 꼼꼼 상담</div>
+    <div class="strength-desc">무리한 안내 없이 고객 상황 맞춤</div>
+  </div>
+
+  <div class="strength-card">
+    <div class="strength-title">✅ 사후관리</div>
+    <div class="strength-desc">개통 후 설정/이전/점검까지</div>
+  </div>
+  <div class="strength-card">
+  <div class="strength-title">✅ 위치·주차 안내</div>
+  <div class="strength-desc">매장 앞 주차 / 도보 1분 금탑주차장</div>
+ </div>
+</div>
+
+  
       <!-- ✅ 안내/사전승낙서 -->
       <div class="notice-wrap">
         <ul class="notice">
@@ -467,7 +592,7 @@
         </a>
       </div>
 
-      <a href="#price-section" class="jump-link">📱 휴대폰 가격 바로 확인하기</a>
+      
 
       <!-- ✅ 액션 -->
       <div class="arrow-area">
@@ -475,21 +600,20 @@
           📞 전화 상담 바로 연결 (010-3677-8043)
         </a>
 
-        <details class="action-block">
-          <summary class="action-link map">
-            <span class="icon-swap" aria-hidden="true"></span>
-            <span class="label"> 찾아오시는 길</span>
-          </summary>
+      <details class="action-block">
+  <summary class="action-link map">
+    <span class="icon-swap" aria-hidden="true"></span>
+    <span class="label"> 찾아오시는 길</span>
+  </summary>
 
-          <div class="map-content">
-            <img
-              src="./map-yeopcophon-jinju.png"
-              alt="진주 휴대폰성지 옆커폰 동성점 찾아오시는 길 약도"
-              class="map-img"
-            >
-          </div>
-        </details>
-      </div>
+  <div class="map-content">
+    <img 
+     src="./IMG/map-yeopcophon-jinju.png"
+     alt="진주 휴대폰성지 옆커폰 동성점 찾아오시는 길 약도"
+     class="map-img"
+    >
+  </div>
+</details>
 
       <!-- ✅ 문의 남기기 -->
       <details class="reserve-toggle">
@@ -630,11 +754,7 @@
       const globalDateEl = document.getElementById("globalDate");
       if (globalDateEl) globalDateEl.textContent = `${y}년 ${m}월 ${day}일`;
 
-      // ✅ 업데이트 시간 표시 (prices.js에서 window.PRICE_UPDATED_AT 있으면 사용)
-      const updateTimeEl = document.getElementById("updateTime");
-      if (updateTimeEl) {
-        updateTimeEl.textContent = window.PRICE_UPDATED_AT || `${y}-${m}-${day}`;
-      }
+      
 
       function formatWon(n) {
         const num = Number(n);

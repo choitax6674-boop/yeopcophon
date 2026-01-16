@@ -747,6 +747,113 @@
     margin-top: 10px;
   }
 }
+    /* =========================
+   ✅ HERO(상단) 최종 정리본
+   ========================= */
+.hero{
+  text-align:center;
+  padding: 12px 6px 6px;
+}
+
+.hero-logo{
+  width: 140px;
+  height: auto;
+  margin-bottom: 8px;
+}
+
+.hero-title{
+  font-size: 20px;
+  font-weight: 900;
+  margin: 4px 0;
+  color:#111827;
+}
+
+.hero-sub{
+  font-size: 14px;
+  color:#374151;
+  font-weight:700;
+  margin: 0 0 12px;
+}
+
+/* ✅ 버튼 2개 + 사전승낙서(오른쪽 위) */
+.hero-actions-wrap{
+  position: relative;
+  display: inline-block; /* ✅ 버튼 영역만큼만 너비 잡기 */
+  margin-top: 10px;
+  padding-right: 92px;   /* ✅ 오른쪽에 사전승낙서 자리 확보 */
+}
+
+.hero-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+}
+
+.hero-btn{
+  width: 160px;          /* ✅ 버튼 크기 여기서 조절 */
+  height: 46px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius: 16px;
+  font-weight: 800;
+  font-size: 15px;
+  text-decoration: none; /* ✅ 밑줄 제거 */
+  white-space: nowrap;
+}
+
+.hero-btn.primary{ background:#111827; color:#fff; }
+.hero-btn.secondary{ background:#2563eb; color:#fff; }
+
+/* ✅ 사전승낙서: “가격확인 버튼 위 오른쪽 빈공간” 고정 */
+.precon{
+  position: absolute;
+  right: 0;
+  top: -6px;                 /* ✅ 위로 살짝 올리기 (원하면 -10~-2 조절) */
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  gap: 4px;
+  text-decoration:none;
+}
+
+.precon img{
+  width: 56px;
+  height: auto;
+  display:block;
+}
+
+.precon-text{
+  font-size: 11px;
+  color:#374151;
+  font-weight:700;
+  line-height:1;
+  margin:0;
+}
+
+/* ✅ 주소/지도 */
+.hero-meta{
+  margin-top: 10px;
+  color:#6b7280;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+/* ✅ 모바일: 사전승낙서 겹침 방지(버튼 아래로 내려감) */
+@media (max-width: 520px){
+  .hero-actions-wrap{
+    display:block;
+    padding-right: 0;
+  }
+  .hero-actions{
+    justify-content:center;
+  }
+  .precon{
+    position: static;
+    margin-top: 10px;
+  }
+}
   </style>
 </head>
 
@@ -761,23 +868,22 @@
   <h1 class="hero-title">진주 휴대폰 성지 옆커폰 동성점</h1>
   <p class="hero-sub">실구매가 투명 공개 · 정확한 상담</p>
 
-  <div class="cta-row">
   <div class="hero-actions-wrap">
-  <div class="hero-actions">
-    <a href="tel:010-3677-8043" class="hero-btn primary">📞 전화 상담</a>
-    <a href="#price-section" class="hero-btn secondary">📱 가격 확인</a>
+    <div class="hero-actions">
+      <a href="tel:010-3677-8043" class="hero-btn primary">📞 전화 상담</a>
+      <a href="#price-section" class="hero-btn secondary">📱 가격 확인</a>
+    </div>
+
+    <!-- ✅ 사전승낙서: 가격확인 버튼 "위 오른쪽" -->
+    <a class="precon"
+       href="https://ictmarket.or.kr:8443/precon/pop_CertIcon.do?PRECON_REQ_ID=PRE0000194294&YN=1"
+       target="_blank" rel="noopener">
+      <img src="https://ictmarket.or.kr:8443/getCertIcon.do?cert_icon=KP25071409387P001" alt="사전승낙서">
+      <span class="precon-text">사전승낙서</span>
+    </a>
   </div>
 
-  <!-- ✅ 사전승낙서: (PC) 버튼 오른쪽 / (모바일) 버튼 아래로 내려감 -->
-  <a class="precon"
-     href="https://ictmarket.or.kr:8443/precon/pop_CertIcon.do?PRECON_REQ_ID=PRE0000194294&YN=1"
-     target="_blank" rel="noopener">
-    <img src="https://ictmarket.or.kr:8443/getCertIcon.do?cert_icon=KP25071409387P001" alt="사전승낙서">
-    <span class="precon-text">사전승낙서</span>
-  </a>
-</div>
-
-  <div class="cta-meta">
+  <div class="hero-meta">
     <div>📍 진주시 남강로 675-1</div>
   </div>
 
@@ -1005,12 +1111,6 @@ const day = String(d.getDate()).padStart(2, "0");
 
 const globalDateEl = document.getElementById("globalDate");
 if (globalDateEl) globalDateEl.textContent = `${y}년 ${m}월 ${day}일`;
-const headerTimeEl = document.getElementById("headerTime");
-if (headerTimeEl) {
-  const pad = (n) => String(n).padStart(2, "0");
-  const hhmm = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  headerTimeEl.textContent = hhmm;
-}
 
 // ✅ 업데이트 시간 표시(예: "12:20 기준")
 const updateTimeEl = document.getElementById("updateTime");

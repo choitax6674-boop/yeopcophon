@@ -505,6 +505,25 @@
   /* ✅ 상호명 영역이 안 가리게 “오른쪽 공간” 확보 */
   .hero-text{ padding-right: 70px; }
 }
+
+    .inline-precon{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-left:10px;
+  text-decoration:none;
+}
+
+.inline-precon img{
+  max-width:48px;
+  height:auto;
+}
+
+.inline-precon .precon-text{
+  font-size:11px;
+  color:#374151;
+  white-space:nowrap;
+}
   </style>
 </head>
 
@@ -572,8 +591,12 @@
           <li class="notice-inline">
             <details class="carrier-inline">
               <summary>▶ 통신사별 공식 요금·상품 안내 보기</summary>
+              <li class="notice-inline">
+            <details class="carrier-inline">
+              <summary>▶ 통신사별 공식 요금·상품 안내 보기</summary>
               <div class="carrier-links-inner">
-
+              <div class="carrier-links-inner">
+              
                 <div class="carrier">
                   <strong>SKT</strong>
                   <ul>
@@ -609,13 +632,7 @@
           </li>
         </ul>
 
-        <a class="precon"
-           href="https://ictmarket.or.kr:8443/precon/pop_CertIcon.do?PRECON_REQ_ID=PRE0000194294&YN=1"
-           target="_blank" rel="noopener">
-          <img src="https://ictmarket.or.kr:8443/getCertIcon.do?cert_icon=KP25071409387P001" alt="사전승낙서">
-          <span class="precon-text">사전승낙서</span>
-        </a>
-      </div>
+        
 
       
 

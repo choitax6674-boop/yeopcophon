@@ -334,9 +334,20 @@
       #tableBox .price-num{ font-size: 12px; }
       .table-wrap{ overflow-x: hidden; }
 
-      .notice-wrap{ display:block !important; }
-      .precon{ margin-top:12px; display:flex; justify-content:flex-start; }
-      .precon img{ max-width:72px; height:auto; }
+      .notice-wrap{ display:flex !important; position:relative; }
+
+.precon{
+  position:absolute;
+  top: 6px;      /* 더 위로 올리고 싶으면 0px ~ 8px로 조절 */
+  right: 10px;   /* 오른쪽 여백 */
+  margin: 0;
+}
+
+.precon img{ max-width:56px; height:auto; }
+.precon-text{ font-size:10px; margin-top:-10px; }
+
+/* ✅ 상호명 가림 방지: 사전승낙서만큼 우측 여백 확보 */
+.hero-text{ padding-right:70px; }
 
       .grid{ grid-template-columns: 1fr !important; gap:12px !important; }
       .seg{ display:flex; gap:10px; }
@@ -483,10 +494,16 @@
 
     @media (max-width: 520px){
   .precon{
-    position: static;
-    margin-top: 8px;
-    align-items: flex-start;
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    margin: 0;
   }
+  .precon img{ max-width: 56px; }
+  .precon-text{ font-size: 10px; margin-top: -10px; }
+  
+  /* ✅ 상호명 영역이 안 가리게 “오른쪽 공간” 확보 */
+  .hero-text{ padding-right: 70px; }
 }
   </style>
 </head>

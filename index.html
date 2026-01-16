@@ -866,8 +866,6 @@
 .reserve-summary{
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
   box-sizing: border-box;
 }
 
@@ -881,6 +879,31 @@
   display:block;
   width:100%;
   box-sizing:border-box;
+}
+    /* ✅ 문의남기기: 텍스트가 찢어지지 않게 한 줄로 고정 */
+.reserve-summary{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  justify-content: flex-start !important;
+  width: auto !important;
+}
+
+.reserve-sub{
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b7280;
+}
+    /* ✅ 전체 페이지를 항상 가운데(예전 폭)로 고정 */
+body{
+  display: flex;
+  justify-content: center;
+}
+
+.wrap{
+  width: 100%;
+  max-width: 580px;
+  margin: 0 auto;
 }
   </style>
 </head>

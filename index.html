@@ -685,6 +685,68 @@
     margin-left: 0;
   }
 }
+
+    /* ✅ 버튼줄 + 사전승낙서 배치용 래퍼 */
+.hero-actions-wrap{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 14px;
+}
+
+/* ✅ 버튼 줄(기존 유지) */
+.hero-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+}
+
+/* ✅ 밑줄/줄그어짐 방지 (a 기본 underline 제거) */
+.hero-btn,
+.hero-btn:visited,
+.hero-btn:hover,
+.hero-btn:active{
+  text-decoration: none;
+}
+
+/* ✅ 사전승낙서: “예전처럼” 이미지 위 + 텍스트 아래 */
+.precon{
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+}
+
+.precon img{
+  width: 56px;     /* 예전 느낌 */
+  height: auto;
+  display: block;
+}
+
+.precon-text{
+  font-size: 11px;
+  color:#374151;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ✅ 모바일에서는 겹치니까 버튼 아래로 내려오게 */
+@media (max-width: 520px){
+  .hero-actions-wrap{
+    flex-direction: column;
+  }
+  .precon{
+    position: static;
+    transform: none;
+    margin-top: 10px;
+  }
+}
   </style>
 </head>
 
@@ -700,12 +762,13 @@
   <p class="hero-sub">실구매가 투명 공개 · 정확한 상담</p>
 
   <div class="cta-row">
+  <div class="hero-actions-wrap">
   <div class="hero-actions">
     <a href="tel:010-3677-8043" class="hero-btn primary">📞 전화 상담</a>
     <a href="#price-section" class="hero-btn secondary">📱 가격 확인</a>
   </div>
 
-  <!-- ✅ 예전 사전승낙서 그대로 / 위치만 여기로 -->
+  <!-- ✅ 사전승낙서: (PC) 버튼 오른쪽 / (모바일) 버튼 아래로 내려감 -->
   <a class="precon"
      href="https://ictmarket.or.kr:8443/precon/pop_CertIcon.do?PRECON_REQ_ID=PRE0000194294&YN=1"
      target="_blank" rel="noopener">

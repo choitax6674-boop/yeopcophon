@@ -657,6 +657,34 @@
   width: 18px;
   height: 18px;
 }
+
+/* 버튼 줄 + 사전승낙서(오른쪽) */
+.cta-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 14px;
+}
+
+/* 오른쪽에 살짝 붙이기 */
+.cta-row .precon{
+  margin-left: 6px;
+}
+
+/* 모바일에서 겹치면 아래로 내려오기 */
+@media (max-width: 520px){
+  .cta-row{
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .cta-row .precon{
+    width: 100%;
+    display:flex;
+    flex-direction: column; /* 예전 그대로 */
+    align-items: flex-end;  /* 오른쪽 정렬 */
+    margin-left: 0;
+  }
+}
   </style>
 </head>
 
@@ -671,18 +699,18 @@
   <h1 class="hero-title">진주 휴대폰 성지 옆커폰 동성점</h1>
   <p class="hero-sub">실구매가 투명 공개 · 정확한 상담</p>
 
-  <div class="cta-block">
-  <div class="hero-actions-row">
+  <div class="cta-row">
   <div class="hero-actions">
     <a href="tel:010-3677-8043" class="hero-btn primary">📞 전화 상담</a>
     <a href="#price-section" class="hero-btn secondary">📱 가격 확인</a>
   </div>
 
-  <a class="precon-chip"
+  <!-- ✅ 예전 사전승낙서 그대로 / 위치만 여기로 -->
+  <a class="precon"
      href="https://ictmarket.or.kr:8443/precon/pop_CertIcon.do?PRECON_REQ_ID=PRE0000194294&YN=1"
      target="_blank" rel="noopener">
     <img src="https://ictmarket.or.kr:8443/getCertIcon.do?cert_icon=KP25071409387P001" alt="사전승낙서">
-    <span>사전승낙서</span>
+    <span class="precon-text">사전승낙서</span>
   </a>
 </div>
 

@@ -458,11 +458,14 @@
 .action-link.reserve:hover{
   opacity:0.92;
 }
+    /* ✅ PC에서 계산하기 버튼 너무 길어지는 거 방지 */
 #calcBtn{
+  width: 100%;
+  max-width: 420px;     /* ✅ 여기 숫자로 길이 조절 (380~460 추천) */
+  margin: 0 auto;       /* ✅ 가운데 정렬 */
+  display: block;
   height: 48px;
-  padding: 0;           /* ✅ 기본 button padding(12px) 무력화 */
   border-radius: 14px;
-  font-size: 15px;
 }
     .stock-out{
   color:#64748b;
@@ -502,15 +505,19 @@
   display:flex;
   gap:10px;
   justify-content:center;
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 
 .hero-btn{
-  padding: 12px 16px;
-  border-radius: 14px;
+  padding: 10px 16px;
+  border-radius: 12px;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
   text-decoration:none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px; 
 }
 
 .hero-btn.primary{
@@ -680,9 +687,7 @@
           <span class="precon-text">사전승낙서</span>
         </a>
       </div>
-      <a href="#price-section" class="jump-link">
-  📱 휴대폰 가격 바로 확인하기
-</a>
+    
 
     
          <!-- 문의 남기기 -->
@@ -716,8 +721,8 @@
       <div class="section-head">
         <div class="section-title">관심있는 핸드폰 가격 알아보기</div>
         <div class="date-global">
-          📅 오늘 기준 · <span id="globalDate">—</span>
-          <span class="update-mini">· <span id="updateTime">—</span></span>
+         📅 <span id="globalDate">—</span>
+         <span class="update-mini">· <span id="updateTime">—</span></span>
         </div>
       </div>
 
